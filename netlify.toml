@@ -2,12 +2,12 @@
   # Build directory
   publish = "streetwear-app/dist"
   
-  # Build command - install dependencies first, then build
-  command = "cd streetwear-app && npm ci && npm run build"
+  # Build command - install dependencies then build
+  command = "cd streetwear-app && npm install && npm run build"
   
-  # Environment variables (will be set in Netlify dashboard)
-  # VITE_SUPABASE_URL = ""
-  # VITE_SUPABASE_ANON_KEY = ""
+  # Environment variables (set in Netlify dashboard)
+  # VITE_SUPABASE_URL = "https://vqtfpwiecppdegrwaadk.supabase.co"
+  # VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 # Redirects for Single Page Application
 [[redirects]]
@@ -29,11 +29,11 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Functions for serverless functions (if needed)
+# Functions for serverless functions
 [functions]
   directory = "netlify/functions"
 
-# Context-specific settings
+# Node.js version
 [context.production]
   environment = { NODE_VERSION = "18" }
 
@@ -42,7 +42,3 @@
 
 [context.branch-deploy]
   environment = { NODE_VERSION = "18" }
-
-# Plugin configuration
-[[plugins]]
-  package = "@netlify/plugin-sitemap"
