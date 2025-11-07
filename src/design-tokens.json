@@ -1,0 +1,708 @@
+{
+  "metadata": {
+    "project": "KULTZR",
+    "description": "Complete design system and tokens for KULTZR streetwear brand. Production-ready for React/Next.js web and React Native mobile apps.",
+    "version": "1.0.0",
+    "author": "KULTZR Design Team",
+    "date": "2024-11-07",
+    "license": "Proprietary"
+  },
+
+  "colors": {
+    "brand": {
+      "primary": {
+        "value": "#0B0B0D",
+        "type": "color",
+        "description": "Jet Black - Main background and dark elements",
+        "contrast": {
+          "white": "21:1",
+          "neon": "17.5:1"
+        },
+        "usage": ["backgrounds", "cards", "buttons-secondary"]
+      },
+      "surface": {
+        "value": "#1E1E20",
+        "type": "color",
+        "description": "Matte charcoal - Card backgrounds and elevated surfaces",
+        "contrast": {
+          "white": "18:1"
+        },
+        "usage": ["cards", "inputs", "elevated-surfaces"]
+      },
+      "accent_neon": {
+        "value": "#A4FF00",
+        "type": "color",
+        "description": "Neon lime green - Primary accent for CTAs and interactive elements",
+        "contrast": {
+          "black": "17.5:1"
+        },
+        "usage": ["primary-buttons", "links", "highlights", "selected-states"]
+      },
+      "accent_orange": {
+        "value": "#FF6A00",
+        "type": "color",
+        "description": "Electric orange - Secondary accent for drops and limited items",
+        "contrast": {
+          "black": "9.8:1"
+        },
+        "usage": ["secondary-buttons", "badges-limited", "drops-banner"]
+      }
+    },
+    
+    "text": {
+      "primary": {
+        "value": "#F5F5F5",
+        "type": "color",
+        "description": "White smoke - Main text color",
+        "contrast": {
+          "background": "19:1"
+        }
+      },
+      "muted": {
+        "value": "#A8A8A8",
+        "type": "color",
+        "description": "Light gray - Secondary text, captions, metadata",
+        "contrast": {
+          "background": "11:1"
+        }
+      },
+      "muted_dark": {
+        "value": "#6B6B6B",
+        "type": "color",
+        "description": "Medium gray - Tertiary text, disabled states"
+      }
+    },
+
+    "semantic": {
+      "danger": {
+        "value": "#FF3B3B",
+        "type": "color",
+        "description": "Error states, destructive actions, sale badges",
+        "usage": ["errors", "alerts", "delete-buttons"]
+      },
+      "success": {
+        "value": "#00FF7A",
+        "type": "color",
+        "description": "Success states, confirmations",
+        "usage": ["success-messages", "confirmations", "available-stock"]
+      },
+      "warning": {
+        "value": "#FFB800",
+        "type": "color",
+        "description": "Warning states, low stock",
+        "usage": ["warnings", "low-stock"]
+      },
+      "info": {
+        "value": "#00B8FF",
+        "type": "color",
+        "description": "Informational messages",
+        "usage": ["info-banners", "tooltips"]
+      }
+    },
+
+    "overlay": {
+      "dark": {
+        "value": "rgba(0, 0, 0, 0.6)",
+        "type": "color",
+        "description": "Modal overlays, image overlays"
+      },
+      "black_90": {
+        "value": "rgba(11, 11, 13, 0.9)",
+        "type": "color",
+        "description": "High opacity overlay"
+      },
+      "black_70": {
+        "value": "rgba(11, 11, 13, 0.7)",
+        "type": "color",
+        "description": "Medium opacity overlay"
+      },
+      "black_50": {
+        "value": "rgba(11, 11, 13, 0.5)",
+        "type": "color"
+      }
+    },
+
+    "surface": {
+      "white": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Pure white for contrast elements"
+      }
+    }
+  },
+
+  "spacing": {
+    "description": "8px base grid system",
+    "scale": {
+      "xs": { "value": 4, "px": "4px", "rem": "0.25rem" },
+      "sm": { "value": 8, "px": "8px", "rem": "0.5rem" },
+      "md": { "value": 16, "px": "16px", "rem": "1rem" },
+      "lg": { "value": 24, "px": "24px", "rem": "1.5rem" },
+      "xl": { "value": 32, "px": "32px", "rem": "2rem" },
+      "xxl": { "value": 48, "px": "48px", "rem": "3rem" },
+      "xxxl": { "value": 64, "px": "64px", "rem": "4rem" }
+    },
+    "full_scale": [4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128],
+    "usage": {
+      "component_padding": "md (16px)",
+      "section_spacing": "xxl (48px)",
+      "card_gap": "lg (24px)",
+      "input_padding": "md (16px)",
+      "button_padding": "md (16px)"
+    }
+  },
+
+  "borderRadius": {
+    "sm": { "value": 6, "px": "6px", "usage": "Small elements, thumbnails" },
+    "md": { "value": 12, "px": "12px", "usage": "Buttons, cards, inputs (default)" },
+    "lg": { "value": 20, "px": "20px", "usage": "Large cards, modals" },
+    "pill": { "value": 9999, "px": "9999px", "usage": "Fully rounded (badges, category chips)" },
+    "circle": { "value": "50%", "usage": "Avatar, circular elements" }
+  },
+
+  "elevation": {
+    "description": "Shadow system for depth and hierarchy",
+    "levels": {
+      "elev_0": {
+        "value": "none",
+        "usage": "Flat elements"
+      },
+      "elev_1": {
+        "value": "0 1px 3px rgba(0, 0, 0, 0.3)",
+        "css": "box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);",
+        "usage": "Cards at rest, product cards"
+      },
+      "elev_2": {
+        "value": "0 4px 12px rgba(0, 0, 0, 0.4)",
+        "css": "box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);",
+        "usage": "Hovered cards, buttons, dropdowns"
+      },
+      "elev_3": {
+        "value": "0 10px 30px rgba(0, 0, 0, 0.5)",
+        "css": "box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);",
+        "usage": "Modals, floating action buttons, overlays"
+      }
+    },
+    "react_native": {
+      "elev_1": {
+        "shadowColor": "#000",
+        "shadowOffset": { "width": 0, "height": 1 },
+        "shadowOpacity": 0.3,
+        "shadowRadius": 3,
+        "elevation": 2
+      },
+      "elev_2": {
+        "shadowColor": "#000",
+        "shadowOffset": { "width": 0, "height": 4 },
+        "shadowOpacity": 0.4,
+        "shadowRadius": 6,
+        "elevation": 6
+      },
+      "elev_3": {
+        "shadowColor": "#000",
+        "shadowOffset": { "width": 0, "height": 10 },
+        "shadowOpacity": 0.5,
+        "shadowRadius": 15,
+        "elevation": 12
+      }
+    }
+  },
+
+  "typography": {
+    "description": "Type system based on Inter for body, Anton/Space Grotesk for display",
+    "fonts": {
+      "display": {
+        "family": "'Anton', 'Space Grotesk', 'Bebas Neue', system-ui, -apple-system, sans-serif",
+        "fallback": "system-ui",
+        "usage": "Headings, hero text, brand elements",
+        "cdn": "https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@700&display=swap"
+      },
+      "body": {
+        "family": "'Inter', 'Poppins', system-ui, -apple-system, sans-serif",
+        "fallback": "system-ui",
+        "usage": "Body text, UI elements, forms",
+        "cdn": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      }
+    },
+
+    "scale": {
+      "h1": {
+        "fontSize": { "px": "48px", "rem": "3rem" },
+        "lineHeight": 1.05,
+        "fontWeight": 700,
+        "letterSpacing": "-0.02em",
+        "fontFamily": "display",
+        "usage": "Page titles, hero headings"
+      },
+      "h2": {
+        "fontSize": { "px": "36px", "rem": "2.25rem" },
+        "lineHeight": 1.08,
+        "fontWeight": 700,
+        "letterSpacing": "-0.01em",
+        "fontFamily": "display",
+        "usage": "Section headings"
+      },
+      "h3": {
+        "fontSize": { "px": "28px", "rem": "1.75rem" },
+        "lineHeight": 1.1,
+        "fontWeight": 700,
+        "letterSpacing": "0",
+        "fontFamily": "body",
+        "usage": "Subsection headings"
+      },
+      "h4": {
+        "fontSize": { "px": "20px", "rem": "1.25rem" },
+        "lineHeight": 1.2,
+        "fontWeight": 600,
+        "letterSpacing": "0",
+        "fontFamily": "body",
+        "usage": "Card titles, component headings"
+      },
+      "body": {
+        "fontSize": { "px": "16px", "rem": "1rem" },
+        "lineHeight": 1.5,
+        "fontWeight": 400,
+        "letterSpacing": "0",
+        "fontFamily": "body",
+        "usage": "Default body text, descriptions"
+      },
+      "sm": {
+        "fontSize": { "px": "14px", "rem": "0.875rem" },
+        "lineHeight": 1.4,
+        "fontWeight": 400,
+        "letterSpacing": "0",
+        "fontFamily": "body",
+        "usage": "Secondary text, metadata, captions"
+      },
+      "xs": {
+        "fontSize": { "px": "12px", "rem": "0.75rem" },
+        "lineHeight": 1.4,
+        "fontWeight": 400,
+        "letterSpacing": "0.02em",
+        "fontFamily": "body",
+        "usage": "Microcopy, badges, tags"
+      }
+    },
+
+    "react_native_scale": {
+      "h1": { "fontSize": 44, "lineHeight": 52, "fontFamily": "Anton-Regular", "fontWeight": "700" },
+      "h2": { "fontSize": 32, "lineHeight": 40, "fontFamily": "Anton-Regular", "fontWeight": "700" },
+      "h3": { "fontSize": 24, "lineHeight": 32, "fontFamily": "Inter-Bold", "fontWeight": "700" },
+      "h4": { "fontSize": 18, "lineHeight": 24, "fontFamily": "Inter-SemiBold", "fontWeight": "600" },
+      "body": { "fontSize": 16, "lineHeight": 24, "fontFamily": "Inter-Regular", "fontWeight": "400" },
+      "sm": { "fontSize": 14, "lineHeight": 20, "fontFamily": "Inter-Regular", "fontWeight": "400" },
+      "xs": { "fontSize": 12, "lineHeight": 16, "fontFamily": "Inter-Regular", "fontWeight": "400" }
+    }
+  },
+
+  "breakpoints": {
+    "description": "Responsive breakpoints for web (mobile-first)",
+    "values": {
+      "xs": { "value": 0, "min": "0px", "description": "Mobile portrait" },
+      "sm": { "value": 640, "min": "640px", "description": "Mobile landscape, small tablets" },
+      "md": { "value": 768, "min": "768px", "description": "Tablets" },
+      "lg": { "value": 1024, "min": "1024px", "description": "Small laptops, desktop" },
+      "xl": { "value": 1280, "min": "1280px", "description": "Desktop" },
+      "xxl": { "value": 1536, "min": "1536px", "description": "Large desktop" }
+    },
+    "grid": {
+      "mobile": { "columns": 4, "gutter": "16px", "margin": "16px" },
+      "tablet": { "columns": 8, "gutter": "24px", "margin": "32px" },
+      "desktop": { "columns": 12, "gutter": "32px", "margin": "auto", "maxWidth": "1280px" }
+    }
+  },
+
+  "motion": {
+    "description": "Animation timings and easing curves",
+    "durations": {
+      "instant": { "value": 0, "ms": "0ms", "usage": "Instant state changes" },
+      "fast": { "value": 120, "ms": "120ms", "usage": "Micro-interactions, hover states" },
+      "normal": { "value": 240, "ms": "240ms", "usage": "Standard transitions, modals" },
+      "slow": { "value": 360, "ms": "360ms", "usage": "Page transitions, complex animations" }
+    },
+    "easing": {
+      "standard": {
+        "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        "css": "transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);",
+        "description": "Standard easing for most transitions"
+      },
+      "sharp": {
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "css": "transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);",
+        "description": "Sharp easing for exits and disappearing elements"
+      },
+      "entrance": {
+        "value": "cubic-bezier(0, 0, 0.2, 1)",
+        "css": "transition-timing-function: cubic-bezier(0, 0, 0.2, 1);",
+        "description": "Easing for entering elements"
+      }
+    },
+    "examples": {
+      "button_hover": {
+        "property": "transform, background-color",
+        "duration": "120ms",
+        "easing": "standard"
+      },
+      "modal_enter": {
+        "property": "opacity, transform",
+        "duration": "240ms",
+        "easing": "entrance",
+        "keyframes": "opacity: 0 -> 1, scale: 0.9 -> 1"
+      },
+      "add_to_cart": {
+        "type": "spring",
+        "stiffness": 220,
+        "damping": 18,
+        "description": "Product fly-to-cart animation"
+      }
+    },
+    "react_native": {
+      "timing": {
+        "config": "{ duration: 240, easing: Easing.bezier(0.2, 0.8, 0.2, 1) }"
+      },
+      "spring": {
+        "config": "{ stiffness: 220, damping: 18, mass: 1 }"
+      }
+    }
+  },
+
+  "components": {
+    "button": {
+      "variants": {
+        "primary": {
+          "default": {
+            "background": "#A4FF00",
+            "color": "#0B0B0D",
+            "padding": "16px 24px",
+            "borderRadius": "12px",
+            "fontWeight": 600,
+            "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.4)",
+            "transition": "all 120ms cubic-bezier(0.2, 0.8, 0.2, 1)"
+          },
+          "hover": {
+            "filter": "brightness(1.1)",
+            "transform": "translateY(-1px)",
+            "boxShadow": "0 6px 16px rgba(0, 0, 0, 0.5)"
+          },
+          "pressed": {
+            "transform": "scale(0.98)",
+            "boxShadow": "0 2px 8px rgba(0, 0, 0, 0.3)"
+          },
+          "disabled": {
+            "background": "#6B6B6B",
+            "color": "#A8A8A8",
+            "cursor": "not-allowed",
+            "opacity": 0.6
+          },
+          "loading": {
+            "cursor": "wait",
+            "opacity": 0.8
+          }
+        },
+        "secondary": {
+          "default": {
+            "background": "#FF6A00",
+            "color": "#0B0B0D",
+            "padding": "16px 24px",
+            "borderRadius": "12px",
+            "fontWeight": 600
+          }
+        },
+        "ghost": {
+          "default": {
+            "background": "transparent",
+            "color": "#F5F5F5",
+            "border": "1px solid rgba(255, 255, 255, 0.08)",
+            "padding": "16px 24px",
+            "borderRadius": "12px",
+            "fontWeight": 600
+          },
+          "hover": {
+            "background": "rgba(255, 255, 255, 0.05)",
+            "borderColor": "#A4FF00"
+          }
+        },
+        "icon": {
+          "default": {
+            "background": "transparent",
+            "color": "#F5F5F5",
+            "padding": "8px",
+            "borderRadius": "12px",
+            "width": "40px",
+            "height": "40px"
+          }
+        }
+      },
+      "sizes": {
+        "sm": { "padding": "8px 16px", "fontSize": "14px", "height": "36px" },
+        "md": { "padding": "12px 20px", "fontSize": "16px", "height": "44px" },
+        "lg": { "padding": "16px 24px", "fontSize": "16px", "height": "52px" }
+      }
+    },
+
+    "input": {
+      "default": {
+        "background": "#1E1E20",
+        "color": "#F5F5F5",
+        "border": "1px solid rgba(255, 255, 255, 0.08)",
+        "borderRadius": "12px",
+        "padding": "12px 16px",
+        "fontSize": "16px",
+        "height": "48px"
+      },
+      "focus": {
+        "borderColor": "#A4FF00",
+        "outline": "none",
+        "boxShadow": "0 0 0 3px rgba(164, 255, 0, 0.1)"
+      },
+      "error": {
+        "borderColor": "#FF3B3B",
+        "boxShadow": "0 0 0 3px rgba(255, 59, 59, 0.1)"
+      }
+    },
+
+    "card": {
+      "default": {
+        "background": "#1E1E20",
+        "borderRadius": "12px",
+        "padding": "16px",
+        "boxShadow": "0 1px 3px rgba(0, 0, 0, 0.3)"
+      },
+      "hover": {
+        "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.4)",
+        "transform": "translateY(-4px)"
+      }
+    },
+
+    "badge": {
+      "variants": {
+        "new": {
+          "background": "#A4FF00",
+          "color": "#0B0B0D",
+          "padding": "4px 12px",
+          "borderRadius": "9999px",
+          "fontSize": "12px",
+          "fontWeight": 600
+        },
+        "limited": {
+          "background": "#FF6A00",
+          "color": "#0B0B0D"
+        },
+        "drop": {
+          "background": "#FF3B3B",
+          "color": "#FFFFFF"
+        }
+      }
+    }
+  },
+
+  "icons": {
+    "default_size": 24,
+    "stroke_width": 2,
+    "available": [
+      "cart",
+      "search",
+      "menu",
+      "close",
+      "heart",
+      "profile",
+      "filter",
+      "sort",
+      "share",
+      "back",
+      "chevron-down",
+      "chevron-left",
+      "chevron-right",
+      "plus",
+      "minus",
+      "trash",
+      "upload",
+      "check",
+      "package",
+      "truck"
+    ],
+    "export_format": "SVG (optimized)",
+    "naming_convention": "{name}-icon.svg"
+  },
+
+  "accessibility": {
+    "contrast_ratios": {
+      "description": "WCAG 2.1 AA compliance",
+      "primary_text": "19:1 (AAA)",
+      "secondary_text": "11:1 (AAA)",
+      "accent_on_dark": "17.5:1 (AAA)",
+      "minimum_target": "Text: 4.5:1 (AA), Large text: 3:1 (AA)"
+    },
+    "touch_targets": {
+      "minimum": "44x44px",
+      "recommended": "48x48px",
+      "spacing": "8px minimum between targets"
+    },
+    "focus_states": {
+      "outline": "2px solid #A4FF00",
+      "offset": "2px"
+    }
+  },
+
+  "routes": {
+    "description": "Screen to route mapping for development",
+    "web": {
+      "/": "Home / Explore",
+      "/product/:id": "Product Detail",
+      "/cart": "Shopping Cart",
+      "/checkout": "Checkout (address, shipping, payment)",
+      "/confirmation": "Order Confirmation",
+      "/profile": "User Profile",
+      "/profile/orders": "Order History",
+      "/profile/wishlist": "Wishlist",
+      "/search": "Search",
+      "/admin/upload": "Product Upload (Admin)"
+    },
+    "react_native_stacks": {
+      "MainStack": ["Home", "ProductDetail", "Search"],
+      "CheckoutStack": ["Cart", "Checkout", "OrderConfirmation"],
+      "ProfileStack": ["Profile", "Orders", "Wishlist", "Settings"],
+      "AdminStack": ["ProductUpload", "InventorySync", "OrderList"]
+    }
+  },
+
+  "microcopy": {
+    "buttons": {
+      "add_to_cart": "ADD TO CART",
+      "buy_now": "BUY NOW",
+      "quick_add": "Quick Add",
+      "continue_shopping": "Continue Shopping",
+      "proceed_checkout": "PROCEED TO CHECKOUT",
+      "place_order": "Place Order",
+      "upload_product": "Upload Product"
+    },
+    "labels": {
+      "size_guide": "Size Guide",
+      "select_size": "Select Size",
+      "shipping_address": "Shipping Address",
+      "payment_method": "Payment Method",
+      "order_summary": "Order Summary"
+    },
+    "messages": {
+      "empty_cart": "Your cart is empty",
+      "added_to_cart": "Added to cart!",
+      "removed_from_cart": "Removed from cart",
+      "order_confirmed": "Order Confirmed!",
+      "select_size_error": "Please select a size"
+    }
+  },
+
+  "tailwind_config": {
+    "description": "Copy this into your tailwind.config.js",
+    "theme": {
+      "extend": {
+        "colors": {
+          "kultzr": {
+            "primary": "#0B0B0D",
+            "surface": "#1E1E20",
+            "accent": "#A4FF00",
+            "accent-orange": "#FF6A00",
+            "text": "#F5F5F5",
+            "muted": "#A8A8A8",
+            "danger": "#FF3B3B",
+            "success": "#00FF7A"
+          }
+        },
+        "spacing": {
+          "xs": "4px",
+          "sm": "8px",
+          "md": "16px",
+          "lg": "24px",
+          "xl": "32px",
+          "xxl": "48px"
+        },
+        "borderRadius": {
+          "sm": "6px",
+          "md": "12px",
+          "lg": "20px",
+          "pill": "9999px"
+        },
+        "fontFamily": {
+          "display": ["Anton", "Space Grotesk", "system-ui"],
+          "sans": ["Inter", "Poppins", "system-ui"]
+        },
+        "boxShadow": {
+          "kultzr-1": "0 1px 3px rgba(0, 0, 0, 0.3)",
+          "kultzr-2": "0 4px 12px rgba(0, 0, 0, 0.4)",
+          "kultzr-3": "0 10px 30px rgba(0, 0, 0, 0.5)"
+        },
+        "animation": {
+          "fade-in": "fadeIn 240ms cubic-bezier(0.2, 0.8, 0.2, 1)",
+          "slide-up": "slideUp 240ms cubic-bezier(0.2, 0.8, 0.2, 1)"
+        }
+      }
+    },
+    "screens": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px",
+      "2xl": "1536px"
+    }
+  },
+
+  "recommended_libraries": {
+    "web": {
+      "animation": "motion/react (Framer Motion)",
+      "forms": "react-hook-form + zod",
+      "state": "zustand or react context",
+      "routing": "next.js app router",
+      "styling": "tailwind CSS v4",
+      "ui_components": "shadcn/ui",
+      "image_optimization": "next/image",
+      "icons": "lucide-react"
+    },
+    "react_native": {
+      "navigation": "react-navigation v6",
+      "animation": "react-native-reanimated",
+      "gestures": "react-native-gesture-handler",
+      "forms": "react-hook-form",
+      "state": "zustand",
+      "ui_library": "react-native-paper or custom",
+      "image_caching": "expo-image"
+    }
+  },
+
+  "usage_examples": {
+    "tailwind_button_primary": "bg-kultzr-accent text-kultzr-primary px-6 py-3 rounded-md shadow-kultzr-2 hover:brightness-110 transition-all duration-120",
+    "tailwind_card": "bg-kultzr-surface rounded-md p-4 shadow-kultzr-1 hover:shadow-kultzr-2 transition-shadow",
+    "react_native_button": {
+      "backgroundColor": "#A4FF00",
+      "paddingVertical": 14,
+      "paddingHorizontal": 20,
+      "borderRadius": 12,
+      "shadowColor": "#000",
+      "shadowOffset": { "width": 0, "height": 4 },
+      "shadowOpacity": 0.4,
+      "shadowRadius": 6,
+      "elevation": 6
+    }
+  },
+
+  "asset_exports": {
+    "icons": {
+      "format": "SVG (optimized, single path)",
+      "sizes": ["24x24 (default)", "48x48 (@2x)", "72x72 (@3x)"],
+      "color": "currentColor (inherit from parent)",
+      "naming": "kebab-case (e.g., cart-icon.svg)"
+    },
+    "images": {
+      "format": "WebP (web), PNG (fallback), PNG (React Native)",
+      "optimization": "Compressed, <200KB per image",
+      "sizes": {
+        "product_card": "800x1066 (3:4 ratio)",
+        "hero": "1920x1080",
+        "thumbnails": "200x266"
+      }
+    },
+    "fonts": {
+      "web": "WOFF2 format + Google Fonts CDN",
+      "react_native": "TTF format in /assets/fonts/"
+    }
+  }
+}
