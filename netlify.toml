@@ -2,8 +2,8 @@
   # Build directory
   publish = "streetwear-app/dist"
   
-  # Build command
-  command = "cd streetwear-app && npm run build"
+  # Build command - install dependencies first, then build
+  command = "cd streetwear-app && npm ci && npm run build"
   
   # Environment variables (will be set in Netlify dashboard)
   # VITE_SUPABASE_URL = ""
