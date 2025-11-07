@@ -1,0 +1,364 @@
+-- KULTZR E-Commerce Sample Data & Triggers
+-- Populate database with streetwear products and setup automation
+
+-- Insert sample categories
+INSERT INTO categories (name, slug, description, sort_order) VALUES
+('Hoodies', 'hoodies', 'Premium streetwear hoodies for the urban culture', 1),
+('T-Shirts', 't-shirts', 'Essential streetwear t-shirts and graphic tees', 2),
+('Footwear', 'footwear', 'Limited edition sneakers and street shoes', 3),
+('Bottoms', 'bottoms', 'Denim, cargo pants, and street shorts', 4),
+('Jackets', 'jackets', 'Bomber jackets, track jackets, and outerwear', 5),
+('Accessories', 'accessories', 'Caps, bags, and streetwear accessories', 6);
+
+-- Insert sample products
+INSERT INTO products (name, description, short_description, price, compare_at_price, sku, slug, category_id, brand, material, tags, is_featured, rating_average, rating_count) VALUES
+(
+  'STEALTH HOODIE',
+  'Premium heavyweight cotton hoodie with embroidered branding. Built for the streets, refined for the culture. Made from 100% organic cotton with a heavyweight 400GSM fleece interior for maximum comfort and warmth.',
+  'Premium heavyweight hoodie with embroidered logo',
+  4999.00,
+  5999.00,
+  'STH-001',
+  'stealth-hoodie',
+  (SELECT id FROM categories WHERE slug = 'hoodies'),
+  'KULTZR',
+  '100% Organic Cotton, 400GSM Fleece',
+  ARRAY['hoodie', 'streetwear', 'premium', 'organic'],
+  true,
+  4.8,
+  127
+),
+(
+  'GHOST RIDER TEE',
+  'Limited edition graphic tee featuring the signature Ghost Rider artwork. 100% organic cotton with screen-printed graphics that won''t fade. Only 100 pieces made - grab yours before they''re gone.',
+  'Limited edition graphic tee with premium print',
+  1999.00,
+  2499.00,
+  'GRT-001',
+  'ghost-rider-tee',
+  (SELECT id FROM categories WHERE slug = 't-shirts'),
+  'KULTZR',
+  '100% Organic Cotton, 180GSM',
+  ARRAY['tee', 'limited', 'graphic', 'organic'],
+  true,
+  4.6,
+  89
+),
+(
+  'CLOUD WALKER SNEAKERS',
+  'Ultra-lightweight sneakers with premium leather upper and cloud-cushion technology. Engineered for all-day comfort with street-ready style. Features recycled rubber sole and breathable mesh lining.',
+  'Ultra-lightweight sneakers with cloud cushioning',
+  7999.00,
+  8999.00,
+  'CWS-001',
+  'cloud-walker-sneakers',
+  (SELECT id FROM categories WHERE slug = 'footwear'),
+  'KULTZR',
+  'Premium Leather Upper, Recycled Rubber Sole',
+  ARRAY['sneakers', 'premium', 'lightweight', 'recycled'],
+  true,
+  4.9,
+  203
+),
+(
+  'URBAN DENIM JEANS',
+  'Slim-fit denim with stretch technology. Washed for a vintage look using Japanese fabric and eco-friendly dyeing process. Features reinforced stitching and tapered leg for the perfect street fit.',
+  'Slim-fit stretch denim with vintage wash',
+  5499.00,
+  6499.00,
+  'UDJ-001',
+  'urban-denim-jeans',
+  (SELECT id FROM categories WHERE slug = 'bottoms'),
+  'KULTZR',
+  'Japanese Denim with Stretch',
+  ARRAY['denim', 'jeans', 'stretch', 'japanese'],
+  false,
+  4.7,
+  156
+),
+(
+  'NIGHT BOMBER JACKET',
+  'MA-1 inspired bomber jacket with modern streetwear twist. Water-resistant nylon shell with insulated lining. Features multiple pockets and signature KULTZR embroidery. Drops November 15, 2024.',
+  'MA-1 inspired bomber with water resistance',
+  8999.00,
+  9999.00,
+  'NBJ-001',
+  'night-bomber-jacket',
+  (SELECT id FROM categories WHERE slug = 'jackets'),
+  'KULTZR',
+  'Water-Resistant Nylon, Insulated Lining',
+  ARRAY['bomber', 'jacket', 'water-resistant', 'limited'],
+  true,
+  4.8,
+  94
+),
+(
+  'FUTURE CAP',
+  '6-panel structured cap with embroidered logo. Adjustable snapback closure. Made from premium cotton twill with moisture-wicking sweatband. Perfect for completing any streetwear fit.',
+  'Structured cap with embroidered logo',
+  1499.00,
+  1799.00,
+  'FC-001',
+  'future-cap',
+  (SELECT id FROM categories WHERE slug = 'accessories'),
+  'KULTZR',
+  'Premium Cotton Twill',
+  ARRAY['cap', 'snapback', 'structured'],
+  false,
+  4.5,
+  67
+),
+(
+  'VOID BACKPACK',
+  '30L capacity backpack with laptop sleeve and water-resistant coating. Features hidden pockets and premium YKK zippers. Perfect for daily carry with street style aesthetic.',
+  '30L backpack with laptop sleeve and water resistance',
+  6499.00,
+  7499.00,
+  'VB-001',
+  'void-backpack',
+  (SELECT id FROM categories WHERE slug = 'accessories'),
+  'KULTZR',
+  'Water-Resistant Fabric, YKK Zippers',
+  ARRAY['backpack', 'laptop-sleeve', 'water-resistant'],
+  true,
+  4.9,
+  143
+),
+(
+  'REBEL HOODIE',
+  'Oversized fit hoodie with French terry cotton and screen-printed graphics. Features dropped shoulders and relaxed silhouette for that perfect streetwear drape.',
+  'Oversized fit hoodie with screen print',
+  5499.00,
+  6499.00,
+  'RH-001',
+  'rebel-hoodie',
+  (SELECT id FROM categories WHERE slug = 'hoodies'),
+  'KULTZR',
+  'French Terry Cotton, 320GSM',
+  ARRAY['hoodie', 'oversized', 'french-terry', 'screen-print'],
+  false,
+  4.7,
+  178
+);
+
+-- Insert product variants for sizing
+INSERT INTO product_variants (product_id, size, color, color_hex, stock_quantity, price, sku) VALUES
+-- Stealth Hoodie variants
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'S', 'Black', '#0B0B0D', 25, 4999.00, 'STH-001-BLK-S'),
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'M', 'Black', '#0B0B0D', 45, 4999.00, 'STH-001-BLK-M'),
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'L', 'Black', '#0B0B0D', 35, 4999.00, 'STH-001-BLK-L'),
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'XL', 'Black', '#0B0B0D', 20, 4999.00, 'STH-001-BLK-XL'),
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'XXL', 'Black', '#0B0B0D', 15, 4999.00, 'STH-001-BLK-XXL'),
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'M', 'Charcoal', '#1E1E20', 30, 4999.00, 'STH-001-CHR-M'),
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'L', 'Charcoal', '#1E1E20', 25, 4999.00, 'STH-001-CHR-L'),
+((SELECT id FROM products WHERE slug = 'stealth-hoodie'), 'XL', 'Charcoal', '#1E1E20', 18, 4999.00, 'STH-001-CHR-XL'),
+
+-- Ghost Rider Tee variants
+((SELECT id FROM products WHERE slug = 'ghost-rider-tee'), 'S', 'Black', '#0B0B0D', 12, 1999.00, 'GRT-001-BLK-S'),
+((SELECT id FROM products WHERE slug = 'ghost-rider-tee'), 'M', 'Black', '#0B0B0D', 8, 1999.00, 'GRT-001-BLK-M'),
+((SELECT id FROM products WHERE slug = 'ghost-rider-tee'), 'L', 'Black', '#0B0B0D', 5, 1999.00, 'GRT-001-BLK-L'),
+((SELECT id FROM products WHERE slug = 'ghost-rider-tee'), 'XL', 'Black', '#0B0B0D', 3, 1999.00, 'GRT-001-BLK-XL'),
+((SELECT id FROM products WHERE slug = 'ghost-rider-tee'), 'M', 'White', '#FFFFFF', 15, 1999.00, 'GRT-001-WHT-M'),
+((SELECT id FROM products WHERE slug = 'ghost-rider-tee'), 'L', 'White', '#FFFFFF', 12, 1999.00, 'GRT-001-WHT-L'),
+
+-- Cloud Walker Sneakers variants
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '7', 'White', '#FFFFFF', 20, 7999.00, 'CWS-001-WHT-7'),
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '8', 'White', '#FFFFFF', 25, 7999.00, 'CWS-001-WHT-8'),
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '9', 'White', '#FFFFFF', 30, 7999.00, 'CWS-001-WHT-9'),
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '10', 'White', '#FFFFFF', 28, 7999.00, 'CWS-001-WHT-10'),
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '11', 'White', '#FFFFFF', 18, 7999.00, 'CWS-001-WHT-11'),
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '8', 'Gray', '#F5F5F5', 15, 7999.00, 'CWS-001-GRY-8'),
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '9', 'Gray', '#F5F5F5', 20, 7999.00, 'CWS-001-GRY-9'),
+((SELECT id FROM products WHERE slug = 'cloud-walker-sneakers'), '10', 'Gray', '#F5F5F5', 22, 7999.00, 'CWS-001-GRY-10'),
+
+-- Urban Denim Jeans variants
+((SELECT id FROM products WHERE slug = 'urban-denim-jeans'), '28', 'Indigo', '#4A5568', 35, 5499.00, 'UDJ-001-IND-28'),
+((SELECT id FROM products WHERE slug = 'urban-denim-jeans'), '30', 'Indigo', '#4A5568', 45, 5499.00, 'UDJ-001-IND-30'),
+((SELECT id FROM products WHERE slug = 'urban-denim-jeans'), '32', 'Indigo', '#4A5568', 50, 5499.00, 'UDJ-001-IND-32'),
+((SELECT id FROM products WHERE slug = 'urban-denim-jeans'), '34', 'Indigo', '#4A5568', 40, 5499.00, 'UDJ-001-IND-34'),
+((SELECT id FROM products WHERE slug = 'urban-denim-jeans'), '36', 'Indigo', '#4A5568', 25, 5499.00, 'UDJ-001-IND-36'),
+((SELECT id FROM products WHERE slug = 'urban-denim-jeans'), '30', 'Black', '#2D3748', 30, 5499.00, 'UDJ-001-BLK-30'),
+((SELECT id FROM products WHERE slug = 'urban-denim-jeans'), '32', 'Black', '#2D3748', 35, 5499.00, 'UDJ-001-BLK-32'),
+
+-- Night Bomber Jacket variants
+((SELECT id FROM products WHERE slug = 'night-bomber-jacket'), 'S', 'Black', '#0B0B0D', 12, 8999.00, 'NBJ-001-BLK-S'),
+((SELECT id FROM products WHERE slug = 'night-bomber-jacket'), 'M', 'Black', '#0B0B0D', 8, 8999.00, 'NBJ-001-BLK-M'),
+((SELECT id FROM products WHERE slug = 'night-bomber-jacket'), 'L', 'Black', '#0B0B0D', 5, 8999.00, 'NBJ-001-BLK-L'),
+((SELECT id FROM products WHERE slug = 'night-bomber-jacket'), 'XL', 'Black', '#0B0B0D', 3, 8999.00, 'NBJ-001-BLK-XL'),
+((SELECT id FROM products WHERE slug = 'night-bomber-jacket'), 'M', 'Charcoal', '#1E1E20', 10, 8999.00, 'NBJ-001-CHR-M'),
+((SELECT id FROM products WHERE slug = 'night-bomber-jacket'), 'L', 'Charcoal', '#1E1E20', 8, 8999.00, 'NBJ-001-CHR-L'),
+
+-- Future Cap (One Size)
+((SELECT id FROM products WHERE slug = 'future-cap'), 'One Size', 'Black', '#0B0B0D', 50, 1499.00, 'FC-001-BLK-OS'),
+((SELECT id FROM products WHERE slug = 'future-cap'), 'One Size', 'Electric Lime', '#A4FF00', 25, 1499.00, 'FC-001-LIME-OS'),
+
+-- Void Backpack (One Size)
+((SELECT id FROM products WHERE slug = 'void-backpack'), 'One Size', 'Black', '#0B0B0D', 30, 6499.00, 'VB-001-BLK-OS'),
+
+-- Rebel Hoodie variants
+((SELECT id FROM products WHERE slug = 'rebel-hoodie'), 'S', 'Black', '#0B0B0D', 20, 5499.00, 'RH-001-BLK-S'),
+((SELECT id FROM products WHERE slug = 'rebel-hoodie'), 'M', 'Black', '#0B0B0D', 30, 5499.00, 'RH-001-BLK-M'),
+((SELECT id FROM products WHERE slug = 'rebel-hoodie'), 'L', 'Black', '#0B0B0D', 35, 5499.00, 'RH-001-BLK-L'),
+((SELECT id FROM products WHERE slug = 'rebel-hoodie'), 'XL', 'Black', '#0B0B0D', 25, 5499.00, 'RH-001-BLK-XL'),
+((SELECT id FROM products WHERE slug = 'rebel-hoodie'), 'M', 'Gray', '#6B6B6B', 18, 5499.00, 'RH-001-GRY-M'),
+((SELECT id FROM products WHERE slug = 'rebel-hoodie'), 'L', 'Gray', '#6B6B6B', 22, 5499.00, 'RH-001-GRY-L'),
+((SELECT id FROM products WHERE slug = 'rebel-hoodie'), 'M', 'Electric Lime', '#A4FF00', 15, 5499.00, 'RH-001-LIME-M');
+
+-- Insert sample coupons
+INSERT INTO coupons (code, type, value, minimum_amount, usage_limit, is_active, starts_at, expires_at) VALUES
+('WELCOME10', 'percentage', 10.00, 2000.00, 1000, true, NOW(), NOW() + INTERVAL '30 days'),
+('FIRSTORDER', 'fixed', 500.00, 3000.00, 500, true, NOW(), NOW() + INTERVAL '60 days'),
+('STREETFASHION', 'percentage', 15.00, 5000.00, 200, true, NOW(), NOW() + INTERVAL '15 days'),
+('FREESHIP', 'free_shipping', 0.00, 2500.00, NULL, true, NOW(), NOW() + INTERVAL '90 days');
+
+-- TRIGGERS FOR AUTOMATION
+
+-- Function to update product ratings when reviews are added
+CREATE OR REPLACE FUNCTION update_product_rating()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  UPDATE products 
+  SET 
+    rating_average = (
+      SELECT COALESCE(AVG(rating), 0)
+      FROM reviews 
+      WHERE product_id = NEW.product_id 
+      AND is_approved = true
+    ),
+    rating_count = (
+      SELECT COUNT(*)
+      FROM reviews 
+      WHERE product_id = NEW.product_id 
+      AND is_approved = true
+    )
+  WHERE id = NEW.product_id;
+  
+  RETURN NEW;
+END;
+$$;
+
+-- Trigger to update product rating when review is approved
+CREATE TRIGGER trigger_update_product_rating
+  AFTER INSERT OR UPDATE ON reviews
+  FOR EACH ROW
+  WHEN (NEW.is_approved = true)
+  EXECUTE FUNCTION update_product_rating();
+
+-- Function to update inventory when orders are placed
+CREATE OR REPLACE FUNCTION update_inventory_on_order()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  -- Update stock for each item in the order
+  IF TG_OP = 'INSERT' THEN
+    -- Decrement stock for ordered items
+    UPDATE product_variants 
+    SET stock_quantity = stock_quantity - NEW.quantity
+    WHERE id = NEW.variant_id;
+    
+    -- Log inventory movement
+    INSERT INTO inventory_movements (product_id, variant_id, type, quantity_change, quantity_after, reference_id, reference_type)
+    SELECT 
+      p.id,
+      NEW.variant_id,
+      'sale',
+      -NEW.quantity,
+      pv.stock_quantity,
+      NEW.order_id,
+      'order'
+    FROM products p
+    JOIN product_variants pv ON pv.id = NEW.variant_id
+    WHERE pv.id = NEW.variant_id;
+    
+    RETURN NEW;
+  END IF;
+  
+  RETURN NULL;
+END;
+$$;
+
+-- Trigger to update inventory when order items are created
+CREATE TRIGGER trigger_update_inventory_on_order
+  AFTER INSERT ON order_items
+  FOR EACH ROW
+  EXECUTE FUNCTION update_inventory_on_order();
+
+-- Function to generate unique order numbers
+CREATE OR REPLACE FUNCTION generate_order_number()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF NEW.order_number IS NULL OR NEW.order_number = '' THEN
+    NEW.order_number := 'KLTZ' || TO_CHAR(NOW(), 'YYMMDD') || LPAD(EXTRACT(EPOCH FROM NOW())::INTEGER % 10000::TEXT, 4, '0');
+  END IF;
+  
+  RETURN NEW;
+END;
+$$;
+
+-- Trigger to auto-generate order numbers
+CREATE TRIGGER trigger_generate_order_number
+  BEFORE INSERT ON orders
+  FOR EACH ROW
+  EXECUTE FUNCTION generate_order_number();
+
+-- Function to handle profile creation on user signup
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name, username)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', ''),
+    COALESCE(NEW.raw_user_meta_data->>'username', split_part(NEW.email, '@', 1))
+  );
+  RETURN NEW;
+END;
+$$;
+
+-- Trigger to create profile when user signs up
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+
+-- Function to sync cart from local storage when user logs in
+CREATE OR REPLACE FUNCTION sync_local_cart_to_db()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  cart_item RECORD;
+  existing_item cart_items%ROWTYPE;
+BEGIN
+  -- This function would be called from application logic
+  -- with cart items from local storage
+  FOR cart_item IN SELECT * FROM json_populate_recordset(NULL::cart_items, $1) LOOP
+    -- Check if item already exists
+    SELECT * INTO existing_item
+    FROM cart_items
+    WHERE user_id = auth.uid()
+    AND product_id = cart_item.product_id
+    AND (variant_id = cart_item.variant_id OR (variant_id IS NULL AND cart_item.variant_id IS NULL));
+    
+    IF FOUND THEN
+      -- Update existing item quantity
+      UPDATE cart_items
+      SET quantity = existing_item.quantity + cart_item.quantity,
+          updated_at = NOW()
+      WHERE id = existing_item.id;
+    ELSE
+      -- Insert new item
+      INSERT INTO cart_items (user_id, product_id, variant_id, quantity)
+      VALUES (auth.uid(), cart_item.product_id, cart_item.variant_id, cart_item.quantity);
+    END IF;
+  END LOOP;
+END;
+$$;

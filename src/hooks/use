@@ -1,0 +1,436 @@
+import { useState, useEffect, useRef } from 'react';
+import { supabase, Product, Order } from '../utils/supabase/client';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
+
+export interface NotificationMessage {
+  id: string;
+  type: 'info' | 'success' | 'warning' | 'error';
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  data?: Record<string, any>;
+  actions?: Array<{
+    label: string;
+    action: () => void;
+    style: 'primary' | 'secondary' | 'danger';
+  }>;
+}
+
+export interface RealtimeEvent {
+  type: 'product_updated' | 'order_status_changed' | 'inventory_low' | 'new_review' | 'promotion' | 'system';
+  payload: any;
+  timestamp: string;
+}
+
+export function useRealtimeNotifications() {
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState<NotificationMessage[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const channelRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!user) return;
+
+    // Subscribe to real-time changes
+    const channel = supabase
+      .channel('kultzr-notifications')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'orders',
+        filter: `user_id=eq.${user.id}`,
+      }, (payload) => {
+        handleOrderUpdate(payload.new as Order);
+      })
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public', 
+        table: 'analytics_events',
+        filter: `user_id=eq.${user.id}`,
+      }, (payload) => {
+        handleAnalyticsEvent(payload.new as any);
+      })
+      .on('broadcast', { event: 'product_update' }, ({ payload }) => {
+        handleProductUpdate(payload);
+      })
+      .on('broadcast', { event: 'system_notification' }, ({ payload }) => {
+        handleSystemNotification(payload);
+      })
+      .subscribe((status) => {
+        setIsConnected(status === 'SUBSCRIBED');
+        console.log('Realtime connection status:', status);
+      });
+
+    channelRef.current = channel;
+
+    // Load existing notifications
+    loadNotifications();
+
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+      }
+    };
+  }, [user]);
+
+  const loadNotifications = async () => {
+    try {
+      // For demo, create some sample notifications
+      const sampleNotifications: NotificationMessage[] = [
+        {
+          id: '1',
+          type: 'success',
+          title: 'Order Confirmed!',
+          message: 'Your order #KLTZ12345678 has been confirmed and is being prepared.',
+          timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
+          read: false,
+          data: { orderId: 'order-123' },
+          actions: [
+            {
+              label: 'Track Order',
+              action: () => console.log('Track order'),
+              style: 'primary'
+            }
+          ]
+        },
+        {
+          id: '2',
+          type: 'info',
+          title: 'New Drop Available',
+          message: 'Limited edition NIGHT BOMBER is now available for pre-order!',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+          read: false,
+          data: { productId: 'night-bomber' }
+        },
+        {
+          id: '3',
+          type: 'warning',
+          title: 'Low Stock Alert',
+          message: 'Only 3 items left of STEALTH HOODIE in your size.',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
+          read: true,
+          data: { productId: 'stealth-hoodie' }
+        }
+      ];
+
+      setNotifications(sampleNotifications);
+      setUnreadCount(sampleNotifications.filter(n => !n.read).length);
+    } catch (error) {
+      console.error('Error loading notifications:', error);
+    }
+  };
+
+  const handleOrderUpdate = (order: Order) => {
+    const notification: NotificationMessage = {
+      id: `order-${order.id}-${Date.now()}`,
+      type: order.status === 'delivered' ? 'success' : 'info',
+      title: getOrderStatusTitle(order.status),
+      message: getOrderStatusMessage(order.status, order.order_number),
+      timestamp: new Date(),
+      read: false,
+      data: { orderId: order.id, status: order.status }
+    };
+
+    setNotifications(prev => [notification, ...prev]);
+    setUnreadCount(prev => prev + 1);
+
+    // Show toast notification
+    toast(notification.title, {
+      description: notification.message,
+      action: {
+        label: 'View',
+        onClick: () => console.log('View order details')
+      }
+    });
+  };
+
+  const handleProductUpdate = (payload: any) => {
+    const notification: NotificationMessage = {
+      id: `product-${payload.productId}-${Date.now()}`,
+      type: 'info',
+      title: 'Product Update',
+      message: payload.message || 'A product you\'re interested in has been updated.',
+      timestamp: new Date(),
+      read: false,
+      data: payload
+    };
+
+    setNotifications(prev => [notification, ...prev]);
+    setUnreadCount(prev => prev + 1);
+  };
+
+  const handleSystemNotification = (payload: any) => {
+    const notification: NotificationMessage = {
+      id: `system-${Date.now()}`,
+      type: payload.type || 'info',
+      title: payload.title,
+      message: payload.message,
+      timestamp: new Date(),
+      read: false,
+      data: payload.data
+    };
+
+    setNotifications(prev => [notification, ...prev]);
+    setUnreadCount(prev => prev + 1);
+  };
+
+  const handleAnalyticsEvent = (event: any) => {
+    if (event.event_type === 'price_drop') {
+      const notification: NotificationMessage = {
+        id: `price-drop-${event.id}`,
+        type: 'success',
+        title: 'Price Drop Alert!',
+        message: `Price dropped for ${event.event_data?.productName}`,
+        timestamp: new Date(),
+        read: false,
+        data: event.event_data
+      };
+
+      setNotifications(prev => [notification, ...prev]);
+      setUnreadCount(prev => prev + 1);
+    }
+  };
+
+  const getOrderStatusTitle = (status: string): string => {
+    switch (status) {
+      case 'confirmed': return 'Order Confirmed';
+      case 'processing': return 'Processing Your Order';
+      case 'shipped': return 'Your Order Shipped';
+      case 'delivered': return 'Order Delivered!';
+      case 'cancelled': return 'Order Cancelled';
+      default: return 'Order Update';
+    }
+  };
+
+  const getOrderStatusMessage = (status: string, orderNumber: string): string => {
+    switch (status) {
+      case 'confirmed': return `Order #${orderNumber} has been confirmed and is being prepared.`;
+      case 'processing': return `Order #${orderNumber} is being processed and will ship soon.`;
+      case 'shipped': return `Order #${orderNumber} has been shipped and is on its way!`;
+      case 'delivered': return `Order #${orderNumber} has been delivered. Hope you love it!`;
+      case 'cancelled': return `Order #${orderNumber} has been cancelled.`;
+      default: return `Order #${orderNumber} has been updated.`;
+    }
+  };
+
+  const markAsRead = (notificationId: string) => {
+    setNotifications(prev =>
+      prev.map(notif =>
+        notif.id === notificationId ? { ...notif, read: true } : notif
+      )
+    );
+    setUnreadCount(prev => Math.max(0, prev - 1));
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
+    setUnreadCount(0);
+  };
+
+  const removeNotification = (notificationId: string) => {
+    const notification = notifications.find(n => n.id === notificationId);
+    if (notification && !notification.read) {
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    }
+    setNotifications(prev => prev.filter(n => n.id !== notificationId));
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+    setUnreadCount(0);
+  };
+
+  const sendNotification = (type: string, payload: any) => {
+    if (channelRef.current) {
+      channelRef.current.send({
+        type: 'broadcast',
+        event: type,
+        payload
+      });
+    }
+  };
+
+  return {
+    notifications,
+    isConnected,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+    removeNotification,
+    clearAllNotifications,
+    sendNotification,
+    loadNotifications
+  };
+}
+
+// Hook for real-time product updates
+export function useRealtimeProducts() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const channelRef = useRef<any>(null);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('kultzr-products')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'products',
+      }, (payload) => {
+        handleProductChange(payload.new as Product);
+      })
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'product_variants',
+      }, (payload) => {
+        handleVariantChange(payload.new as any);
+      })
+      .subscribe((status) => {
+        setIsConnected(status === 'SUBSCRIBED');
+      });
+
+    channelRef.current = channel;
+
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+      }
+    };
+  }, []);
+
+  const handleProductChange = (updatedProduct: Product) => {
+    setProducts(prev =>
+      prev.map(product =>
+        product.id === updatedProduct.id
+          ? { ...product, ...updatedProduct }
+          : product
+      )
+    );
+
+    // Show notification for price changes or stock updates
+    if (updatedProduct.price) {
+      toast.info('Product Updated', {
+        description: `${updatedProduct.name} has been updated`
+      });
+    }
+  };
+
+  const handleVariantChange = (updatedVariant: any) => {
+    setProducts(prev =>
+      prev.map(product => {
+        if (product.id === updatedVariant.product_id) {
+          const updatedVariants = product.product_variants?.map(variant =>
+            variant.id === updatedVariant.id
+              ? { ...variant, ...updatedVariant }
+              : variant
+          ) || [];
+          
+          return { ...product, product_variants: updatedVariants };
+        }
+        return product;
+      })
+    );
+  };
+
+  const subscribeToProduct = (productId: string) => {
+    if (channelRef.current) {
+      channelRef.current.send({
+        type: 'broadcast',
+        event: 'subscribe_product',
+        payload: { productId }
+      });
+    }
+  };
+
+  return {
+    products,
+    isConnected,
+    subscribeToProduct
+  };
+}
+
+// Hook for real-time inventory tracking
+export function useRealtimeInventory() {
+  const [lowStockProducts, setLowStockProducts] = useState<Product[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const channelRef = useRef<any>(null);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('kultzr-inventory')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'product_variants',
+      }, (payload) => {
+        handleInventoryChange(payload.new as any);
+      })
+      .subscribe((status) => {
+        setIsConnected(status === 'SUBSCRIBED');
+      });
+
+    channelRef.current = channel;
+
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+      }
+    };
+  }, []);
+
+  const handleInventoryChange = (updatedVariant: any) => {
+    if (updatedVariant.stock_quantity <= 5) {
+      // Low stock alert
+      toast.warning('Low Stock Alert', {
+        description: 'Some products are running low on stock'
+      });
+    }
+  };
+
+  return {
+    lowStockProducts,
+    isConnected
+  };
+}
+
+// Hook for real-time order tracking
+export function useRealtimeOrderTracking(orderId: string) {
+  const [order, setOrder] = useState<Order | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const channelRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!orderId) return;
+
+    const channel = supabase
+      .channel(`kultzr-order-${orderId}`)
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'orders',
+        filter: `id=eq.${orderId}`,
+      }, (payload) => {
+        setOrder(payload.new as Order);
+      })
+      .subscribe((status) => {
+        setIsConnected(status === 'SUBSCRIBED');
+      });
+
+    channelRef.current = channel;
+
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+      }
+    };
+  }, [orderId]);
+
+  return {
+    order,
+    isConnected
+  };
+}

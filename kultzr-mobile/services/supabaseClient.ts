@@ -1,7 +1,8 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { projectId, publicAnonKey } from './info';
 
-// Singleton Supabase client for web
+// Singleton Supabase client for mobile
 let supabaseClient: ReturnType<typeof createSupabaseClient> | null = null;
 
 export function createClient() {
@@ -13,9 +14,10 @@ export function createClient() {
   
   supabaseClient = createSupabaseClient(supabaseUrl, publicAnonKey, {
     auth: {
+      storage: AsyncStorage,
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true,
+      detectSessionInUrl: false,
       flowType: 'pkce'
     }
   });
@@ -26,7 +28,7 @@ export function createClient() {
 // Export singleton instance
 export const supabase = createClient();
 
-// Database Types - Updated for KULTZR E-commerce
+// Database Types (same as web app)
 export interface Profile {
   id: string;
   username?: string;
@@ -113,6 +115,7 @@ export interface Product {
   sizes?: string[];
   colors?: string[];
   rating?: number;
+  image?: string;
   
   // Relations
   category?: Category;
@@ -138,36 +141,6 @@ export interface ProductVariant {
   is_active: boolean;
   printful_variant_id?: string;
   printful_sync_id?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface ProductImage {
-  id: string;
-  product_id: string;
-  variant_id?: string;
-  image_url: string;
-  alt_text?: string;
-  sort_order: number;
-  is_primary: boolean;
-  created_at: string;
-}
-
-export interface Address {
-  id: string;
-  user_id: string;
-  type: 'billing' | 'shipping';
-  first_name?: string;
-  last_name?: string;
-  company?: string;
-  address_line_1: string;
-  address_line_2?: string;
-  city: string;
-  state?: string;
-  postal_code: string;
-  country: string;
-  phone?: string;
-  is_default: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -233,15 +206,6 @@ export interface OrderItem {
   created_at: string;
 }
 
-export interface Wishlist {
-  id: string;
-  user_id: string;
-  product_id: string;
-  variant_id?: string;
-  notes?: string;
-  created_at: string;
-}
-
 export interface CartItem {
   id: string;
   user_id: string;
@@ -252,93 +216,18 @@ export interface CartItem {
   updated_at: string;
 }
 
-export interface Coupon {
-  id: string;
-  code: string;
-  type: 'percentage' | 'fixed' | 'free_shipping';
-  value: number;
-  minimum_amount: number;
-  maximum_discount?: number;
-  usage_limit?: number;
-  used_count: number;
-  is_active: boolean;
-  starts_at?: string;
-  expires_at?: string;
-  created_at: string;
-  updated_at: string;
+export interface CartItemWithDetails extends CartItem {
+  product: Product;
+  variant?: ProductVariant;
 }
 
-export interface UsedCoupon {
+export interface Wishlist {
   id: string;
-  coupon_id: string;
-  order_id: string;
   user_id: string;
-  discount_amount: number;
-  used_at: string;
-}
-
-export interface Review {
-  id: string;
-  product_id: string;
-  user_id: string;
-  order_item_id?: string;
-  rating: number;
-  title?: string;
-  comment?: string;
-  is_verified: boolean;
-  is_approved: boolean;
-  helpful_count: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface InventoryMovement {
-  id: string;
   product_id: string;
   variant_id?: string;
-  type: 'sale' | 'restock' | 'adjustment' | 'return' | 'damaged';
-  quantity_change: number;
-  quantity_after: number;
-  reference_id?: string;
-  reference_type?: string;
   notes?: string;
   created_at: string;
-}
-
-export interface NewsletterSubscription {
-  id: string;
-  email: string;
-  is_active: boolean;
-  source?: string;
-  preferences?: Record<string, any>;
-  subscribed_at: string;
-  unsubscribed_at?: string;
-}
-
-export interface AnalyticsEvent {
-  id: string;
-  user_id?: string;
-  session_id?: string;
-  event_type: string;
-  event_data?: Record<string, any>;
-  page_url?: string;
-  referrer?: string;
-  user_agent?: string;
-  ip_address?: string;
-  created_at: string;
-}
-
-export interface PrintfulSync {
-  id: string;
-  product_id?: string;
-  variant_id?: string;
-  printful_product_id?: string;
-  printful_variant_id?: string;
-  sync_status: 'pending' | 'synced' | 'error';
-  last_sync_at?: string;
-  sync_data?: Record<string, any>;
-  created_at: string;
-  updated_at: string;
 }
 
 // Auth types
@@ -360,38 +249,17 @@ export interface AuthSession {
   user: AuthUser;
 }
 
-// Form validation schemas
-export interface SignUpForm {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  fullName: string;
-  username: string;
-  phone?: string;
-  acceptTerms: boolean;
-}
-
-export interface SignInForm {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
-
-export interface ResetPasswordForm {
-  email: string;
-}
-
-export interface UpdatePasswordForm {
-  password: string;
-  confirmPassword: string;
-}
-
-export interface ProfileUpdateForm {
-  full_name?: string;
-  username?: string;
-  phone?: string;
-  date_of_birth?: string;
-  gender?: 'male' | 'female' | 'other';
+// Filter types for products
+export interface ProductFilters {
+  search?: string;
+  category?: string;
+  priceRange?: [number, number];
+  sizes?: string[];
+  colors?: string[];
+  inStock?: boolean;
+  sortBy?: 'newest' | 'price_low' | 'price_high' | 'rating' | 'popular';
+  page?: number;
+  limit?: number;
 }
 
 // API Response types
@@ -410,24 +278,6 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-// Filter types for products
-export interface ProductFilters {
-  search?: string;
-  category?: string;
-  priceRange?: [number, number];
-  sizes?: string[];
-  colors?: string[];
-  inStock?: boolean;
-  sortBy?: 'newest' | 'price_low' | 'price_high' | 'rating' | 'popular';
-  page?: number;
-  limit?: number;
-}
-
-export interface CartItemWithDetails extends CartItem {
-  product: Product;
-  variant?: ProductVariant;
-}
-
 // Utility type for converting legacy product to new format
 export function toNewProduct(legacy: LegacyProduct): Partial<Product> {
   return {
@@ -435,7 +285,7 @@ export function toNewProduct(legacy: LegacyProduct): Partial<Product> {
     name: legacy.name,
     price: legacy.price,
     slug: legacy.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-    images: [legacy.image],
+    images: legacy.image ? [legacy.image] : [],
     is_active: legacy.is_active ?? true,
     is_featured: false,
     is_digital: false,
@@ -448,6 +298,7 @@ export function toNewProduct(legacy: LegacyProduct): Partial<Product> {
     category: legacy.category,
     sizes: legacy.sizes,
     colors: legacy.colors,
-    rating: legacy.rating
+    rating: legacy.rating,
+    image: legacy.image
   };
 }

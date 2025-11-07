@@ -1,0 +1,290 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Anton:wght@400&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Poppins', system-ui, -apple-system, sans-serif;
+  background-color: #0B0B0D;
+  color: #F5F5F5;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1E1E20;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A2A2A;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A4FF00;
+}
+
+/* Custom Classes */
+@layer components {
+  .btn-primary {
+    @apply bg-street-accent text-street-primary font-semibold py-3 px-6 rounded-lg 
+           hover:brightness-110 transition-all duration-200 shadow-neon 
+           hover:shadow-neon-lg transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent border-2 border-street-accent text-street-accent 
+           font-semibold py-3 px-6 rounded-lg hover:bg-street-accent 
+           hover:text-street-primary transition-all duration-200;
+  }
+  
+  .btn-ghost {
+    @apply bg-transparent text-street-text hover:text-street-accent 
+           font-medium py-2 px-4 rounded-lg hover:bg-street-secondary 
+           transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-street-secondary rounded-xl border border-street-border 
+           shadow-card hover:shadow-card-hover transition-all duration-300;
+  }
+  
+  .input {
+    @apply bg-street-secondary border border-street-border text-street-text 
+           px-4 py-3 rounded-lg focus:ring-2 focus:ring-street-accent 
+           focus:border-street-accent transition-all duration-200 
+           placeholder:text-street-text-muted;
+  }
+  
+  .container-street {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .text-gradient-accent {
+    @apply bg-gradient-to-r from-street-accent to-street-accent-orange bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-orange {
+    @apply bg-gradient-to-r from-street-accent-orange to-red-500 bg-clip-text text-transparent;
+  }
+  
+  .glass {
+    @apply bg-black/20 backdrop-blur-md border border-white/10;
+  }
+  
+  .street-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+  }
+  
+  .product-card {
+    @apply card p-4 group cursor-pointer overflow-hidden;
+  }
+  
+  .product-card:hover {
+    @apply transform -translate-y-1;
+  }
+  
+  .product-image {
+    @apply w-full aspect-[3/4] object-cover rounded-lg mb-4 
+           group-hover:scale-105 transition-transform duration-300;
+  }
+  
+  .badge {
+    @apply px-2 py-1 text-xs font-semibold rounded-full;
+  }
+  
+  .badge-new {
+    @apply badge bg-street-accent text-street-primary;
+  }
+  
+  .badge-limited {
+    @apply badge bg-street-accent-orange text-street-primary;
+  }
+  
+  .badge-sale {
+    @apply badge bg-red-500 text-white;
+  }
+  
+  .hero-title {
+    @apply text-hero font-display text-center mb-6;
+  }
+  
+  .section-title {
+    @apply text-h2 font-display text-center mb-8;
+  }
+  
+  .nav-link {
+    @apply text-street-text hover:text-street-accent font-medium 
+           transition-colors duration-200 relative;
+  }
+  
+  .nav-link::after {
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-street-accent 
+           transition-all duration-300 content-[''];
+  }
+  
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px #A4FF00, 0 0 10px #A4FF00, 0 0 15px #A4FF00;
+  }
+  50% {
+    box-shadow: 0 0 10px #A4FF00, 0 0 20px #A4FF00, 0 0 30px #A4FF00;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+.animate-neon-pulse {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+/* Loading States */
+.skeleton {
+  @apply bg-street-secondary animate-pulse rounded;
+}
+
+.skeleton-text {
+  @apply skeleton h-4 w-full;
+}
+
+.skeleton-title {
+  @apply skeleton h-6 w-3/4;
+}
+
+.skeleton-avatar {
+  @apply skeleton h-12 w-12 rounded-full;
+}
+
+.skeleton-image {
+  @apply skeleton w-full aspect-[3/4] rounded-lg;
+}
+
+/* Utility Classes */
+.aspect-product {
+  aspect-ratio: 3/4;
+}
+
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.gradient-overlay {
+  background: linear-gradient(to bottom, transparent 0%, rgba(11, 11, 13, 0.8) 100%);
+}
+
+.backdrop-blur-street {
+  backdrop-filter: blur(12px) saturate(150%);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .hero-title {
+    @apply text-4xl;
+  }
+  
+  .section-title {
+    @apply text-2xl;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .card {
+    @apply border-2 border-white;
+  }
+  
+  .btn-primary {
+    @apply border-2 border-white;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

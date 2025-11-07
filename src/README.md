@@ -28,7 +28,7 @@ KULTZR is a **complete e-commerce solution** for modern streetwear brands. It in
 - 📱 **Native Mobile App** - React Native with Expo for iOS & Android
 - 🗄️ **Backend & Database** - Supabase (PostgreSQL, Auth, Storage, Edge Functions)
 - 📦 **Dropshipping Ready** - Printful integration for on-demand printing
-- 💳 **Payment Integration** - Ready for Razorpay (India) or Stripe (Global)
+- 💳 **Payment Integration** - Ready for Razorpay (India)
 - 🎨 **Complete Design System** - Design tokens, component library, style guide
 - 📊 **Admin Dashboard** - Product management, order tracking, inventory sync
 
@@ -98,7 +98,7 @@ KULTZR is a **complete e-commerce solution** for modern streetwear brands. It in
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/kultzr.git
+git clone https://github.com/codgamerofficial/kultzr.git
 cd kultzr
 
 # 2. Install dependencies
